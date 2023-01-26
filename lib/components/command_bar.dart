@@ -24,6 +24,7 @@ class CommandBar extends StatelessWidget {
                 CommandButton(command: ElementCommands.addElement),
                 CommandButton(command: ElementCommands.removeElement),
                 CommandButton(command: ElementCommands.loadSample),
+                CommandButton(command: ElementCommands.loadSampleXml),
                 CommandButton(command: ElementCommands.loadFile),
               ]),
             ],

@@ -39,6 +39,9 @@ class CommandButton extends StatelessWidget {
             case ElementCommands.loadSample:
               myModel.loadSample();
               break;
+            case ElementCommands.loadSampleXml:
+              myModel.createSampleXMLData();
+              break;
             case ElementCommands.loadFile:
               myModel.loadFile();
               break;

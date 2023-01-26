@@ -17,7 +17,7 @@ class DisplayScreen extends StatelessWidget {
           child: ListView.builder(
             controller: myModel.scrollController,
             reverse: false,
-            itemCount: myModel.elements.length,
+            itemCount: myModel.elements?.length,
             itemBuilder: (context, i) {
               return Card(
                 child: ListTile(
