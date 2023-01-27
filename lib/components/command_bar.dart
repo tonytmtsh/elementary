@@ -20,7 +20,7 @@ class CommandBar extends StatelessWidget {
               Text(myModel.notes),
               Row(children: const [
                 CommandButton(command: ElementCommands.clear),
-                CommandButton(command: ElementCommands.reset),
+                CommandButton(command: ElementCommands.revert),
                 CommandButton(command: ElementCommands.addElement),
                 CommandButton(command: ElementCommands.removeElement),
                 CommandButton(command: ElementCommands.loadSample),

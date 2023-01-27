@@ -14,7 +14,7 @@ class CommandButton extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: command == ElementCommands.reset
+            primary: command == ElementCommands.revert
                 ? Colors.pink
                 : command == ElementCommands.clear
                     ? Colors.orange
@@ -24,11 +24,11 @@ class CommandButton extends StatelessWidget {
         child: Text(commandText(command)),
         onPressed: () {
           switch (command) {
-            case ElementCommands.reset:
-              myModel.reset();
-              break;
             case ElementCommands.clear:
               myModel.clear();
+              break;
+            case ElementCommands.revert:
+              myModel.revert();
               break;
             case ElementCommands.addElement:
               myModel.addElement();

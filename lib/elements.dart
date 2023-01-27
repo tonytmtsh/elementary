@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 enum ElementCommands {
-  reset,
   clear,
+  revert,
   addElement,
   removeElement,
   loadSample,
@@ -17,11 +17,11 @@ enum ElementCommands {
 String commandText(ElementCommands x) {
   String text = "";
   switch (x) {
-    case ElementCommands.reset:
-      text = "reset";
-      break;
     case ElementCommands.clear:
       text = "clear";
+      break;
+    case ElementCommands.revert:
+      text = "reset";
       break;
     case ElementCommands.addElement:
       text = "add";
@@ -64,6 +64,7 @@ class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
 
   List<Element> elements = <Element>[];
+  List<Element> savedlist = <Element>[];
   String notes = 'init';
 
   void createSampleData() {
@@ -124,6 +125,7 @@ class ElementsType with ChangeNotifier {
         .toList();
 
     elements = elementsX!;
+    savedlist = [...elements];
     notifyListeners();
   }
 
@@ -133,8 +135,10 @@ class ElementsType with ChangeNotifier {
     notifyListeners();
   }
 
-  void reset() {
-    clear();
+  void revert() {
+    elements.clear();
+    elements = [...savedlist];
+    notifyListeners();
   }
 
   void addElement() {
@@ -156,6 +160,7 @@ class ElementsType with ChangeNotifier {
   void loadSample() {
     clear();
     createSampleData();
+    savedlist = [...elements];
     notes = "sample loaded";
     notifyListeners();
   }
