@@ -21,7 +21,7 @@ String commandText(ElementCommands x) {
       text = "clear";
       break;
     case ElementCommands.revert:
-      text = "reset";
+      text = "revert";
       break;
     case ElementCommands.addElement:
       text = "add";
