@@ -168,7 +168,7 @@ class ElementsType with ChangeNotifier {
   }
 
   Future<void> loadFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    var result = await FilePicker.platform.pickFiles(
         dialogTitle: "Choose XML file to load",
         type: FileType.any,
         allowedExtensions: ['xml']);
