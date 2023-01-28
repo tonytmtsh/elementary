@@ -14,7 +14,7 @@ class CommandButton extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: command == ElementCommands.revert
+            backgroundColor: command == ElementCommands.revert
                 ? Colors.pink
                 : command == ElementCommands.clear
                     ? Colors.orange

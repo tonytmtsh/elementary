@@ -18,25 +18,25 @@ String commandText(ElementCommands x) {
   String text = "";
   switch (x) {
     case ElementCommands.clear:
-      text = "clear";
+      text = "clr";
       break;
     case ElementCommands.revert:
-      text = "revert";
+      text = "undo";
       break;
     case ElementCommands.addElement:
       text = "add";
       break;
     case ElementCommands.removeElement:
-      text = "remove";
+      text = "del";
       break;
     case ElementCommands.loadSample:
-      text = "sample data";
+      text = "model";
       break;
     case ElementCommands.loadSampleXml:
-      text = "sample Xml";
+      text = "xml";
       break;
     case ElementCommands.loadFile:
-      text = "load file";
+      text = "load";
       break;
   }
   return text;
@@ -62,6 +62,8 @@ class Element {
 
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
+
+  String appTitle = "Elementary </XML>";
 
   List<Element> elements = <Element>[];
   List<Element> savedlist = <Element>[];
