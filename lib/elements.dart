@@ -1,5 +1,7 @@
-import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:xml/xml.dart';
+import 'dart:html';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -144,7 +146,7 @@ class ElementsType with ChangeNotifier {
   }
 
   void addElement() {
-    elements?.add(Element(
+    elements.add(Element(
         1,
         'added',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183405/Telemundo.png',
@@ -154,7 +156,7 @@ class ElementsType with ChangeNotifier {
   }
 
   void removeElement() {
-    elements?.removeAt(0);
+    elements.removeAt(0);
     notes = 'removed element';
     notifyListeners();
   }
@@ -170,12 +172,14 @@ class ElementsType with ChangeNotifier {
   Future<void> loadFile() async {
     var result = await FilePicker.platform.pickFiles(
         dialogTitle: "Choose XML file to load",
-        type: FileType.any,
+        type: FileType.custom,
+        allowMultiple: false,
         allowedExtensions: ['xml']);
     if (result != null) {
       clear();
       PlatformFile file = result.files.first;
-      notes = 'file added with name ${file.path} ${file.name}';
+      String xmlString = String.fromCharCodes(file.bytes as Iterable<int>);
+      notes = 'file added ${file.size} string: ${xmlString.length}.';
       notifyListeners();
     }
   }
