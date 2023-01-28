@@ -180,6 +180,17 @@ class ElementsType with ChangeNotifier {
       PlatformFile file = result.files.first;
       String xmlString = String.fromCharCodes(file.bytes as Iterable<int>);
       notes = 'file added ${file.size} string: ${xmlString.length}.';
+
+      XmlElement? xdoc = XmlDocument.parse(xmlString).getElement('favourites');
+
+      var elementsX = xdoc
+        ?.findElements('favourite')
+        .map<Element>((e) => Element.fromElement(e))
+        .toList();
+
+      elements = elementsX!;
+      savedlist = [...elements];
+
       notifyListeners();
     }
   }

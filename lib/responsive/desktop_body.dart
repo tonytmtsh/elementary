@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/command_bar.dart';
 import '../components/display_screen.dart';
+import '../components/display_log.dart';
 
 class MyDesktopBody extends StatelessWidget {
   const MyDesktopBody({Key? key}) : super(key: key);
@@ -61,7 +62,14 @@ class MyDesktopBody extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         color: Colors.deepPurple[300],
-                        child: const Text('sideboard'),
+                        child: const Text('side board'),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        color: Colors.deepPurple[300],
+                        child: const DisplayLog(),
                       ),
                     ),
                   ])),

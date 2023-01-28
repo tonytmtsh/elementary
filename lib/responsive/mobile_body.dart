@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../components/command_bar.dart';
 import '../components/display_screen.dart';
+import '../components/display_log.dart';
+
 
 class MyMobileBody extends StatelessWidget {
   const MyMobileBody({Key? key}) : super(key: key);
@@ -57,6 +59,12 @@ class MyMobileBody extends StatelessWidget {
               ),
             ),
           ]),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.deepPurple,
+                child: const DisplayLog(),
+              )),
           Expanded(
               child: Padding(
                   padding: const EdgeInsets.all(8.0),
