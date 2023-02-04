@@ -12,30 +12,28 @@ class DisplayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ElementsType>(builder: (context, myModel, child) {
-      return Expanded(
-          flex: 10,
-          child: ListView.builder(
-            controller: myModel.scrollController,
-            reverse: false,
-            itemCount: myModel.elements.length,
-            itemBuilder: (context, i) {
-              return Card(
-                child: ListTile(
-                  dense: true,
-                  leading: CachedNetworkImage(
-                    imageUrl: myModel.elements[i].thumb,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
-                  title: Text(myModel.elements[i].name,
-                      style: TextStyles.body.bold),
-                  trailing: Text('${myModel.elements[i].id}'),
-                ),
-              );
-            },
-          ));
+      return ListView.builder(
+        controller: myModel.scrollController,
+        reverse: false,
+        itemCount: myModel.elements.length,
+        itemBuilder: (context, i) {
+          return Card(
+            child: ListTile(
+              dense: true,
+              leading: CachedNetworkImage(
+                imageUrl: myModel.elements[i].thumb,
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
+              ),
+              title: Text(myModel.elements[i].name,
+                  style: TextStyles.body.bold),
+              trailing: Text('${myModel.elements[i].id}'),
+            ),
+          );
+        },
+      );
     });
   }
 }
