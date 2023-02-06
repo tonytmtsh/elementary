@@ -64,10 +64,15 @@ class Element {
 
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
+  ScrollController scrollAController = ScrollController();
+  ScrollController scrollBController = ScrollController();
 
   String appTitle = "Elementary </XML>";
 
   List<Element> elements = <Element>[];
+  List<Element> sideboard = <Element>[];
+  int bookmarkA = -1;
+  int bookmarkB = -1;
   List<Element> savedlist = <Element>[];
   String notes = 'init';
 
@@ -129,18 +134,21 @@ class ElementsType with ChangeNotifier {
         .toList();
 
     elements = elementsX!;
+    sideboard.clear();
     savedlist = [...elements];
     notifyListeners();
   }
 
   void clear() {
     elements.clear();
+    sideboard.clear();
     notes = 'cleared';
     notifyListeners();
   }
 
   void revert() {
     elements.clear();
+    sideboard.clear();
     elements = [...savedlist];
     notifyListeners();
   }
@@ -156,6 +164,8 @@ class ElementsType with ChangeNotifier {
   }
 
   void removeElement() {
+    Element x = elements[0];
+    sideboard.add(x);
     elements.removeAt(0);
     notes = 'removed element';
     notifyListeners();
