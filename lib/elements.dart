@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:xml/xml.dart';
 import 'dart:html';
 import 'dart:convert';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,7 +46,7 @@ String commandText(ElementCommands x) {
 }
 
 class Element {
-  int id;
+  String id;
   String name;
   String thumb;
   String data;
@@ -53,8 +54,9 @@ class Element {
   Element(this.id, this.name, this.thumb, this.data);
 
   factory Element.fromElement(XmlElement element) {
+    var uuid = const Uuid();
     return Element(
-      1,
+      uuid.v1(),
       element.getAttribute('name') ?? "",
       element.getAttribute('thumb') ?? "",
       element.innerText,
@@ -78,37 +80,37 @@ class ElementsType with ChangeNotifier {
 
   void createSampleData() {
     elements.add(Element(
-        1,
+        '1',
         'Testing NAME 1',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183304/Fox-News-Channel.png',
         'Data string 1234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        2,
+        '2',
         'Testing NAME 2',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183322/MSNBC.png',
         'Data string 2234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        3,
+        '3',
         'Testing NAME 3',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183339/Univision.png',
         'Data string 3234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        4,
+        '4',
         'Testing NAME 4',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183350/Hallmark-Channel.png',
         'Data string 4234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        5,
+        '5',
         'Testing NAME 5',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183411/History-Channels.png',
         'Data string 5234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        6,
+        '6',
         'Testing NAME 6',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183512/Food-Network.png',
         'Data string 6234-ABCD-2345-BCDE-3456-CDEF'));
     elements.add(Element(
-        7,
+        '7',
         'Testing NAME 7',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183243/NBC-1.png',
         'Data string 7234-ABCD-2345-BCDE-3456-CDEF'));
@@ -155,7 +157,7 @@ class ElementsType with ChangeNotifier {
 
   void addElement() {
     elements.add(Element(
-        1,
+        '1',
         'added',
         'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183405/Telemundo.png',
         'testdata'));
@@ -179,6 +181,13 @@ class ElementsType with ChangeNotifier {
     notifyListeners();
   }
 
+  void swapItems(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+    final element = elements.removeAt(oldIndex);
+    elements.insert(newIndex, element);
+    notifyListeners();
+  }
+
   Future<void> loadFile() async {
     var result = await FilePicker.platform.pickFiles(
         dialogTitle: "Choose XML file to load",
@@ -194,9 +203,9 @@ class ElementsType with ChangeNotifier {
       XmlElement? xdoc = XmlDocument.parse(xmlString).getElement('favourites');
 
       var elementsX = xdoc
-        ?.findElements('favourite')
-        .map<Element>((e) => Element.fromElement(e))
-        .toList();
+          ?.findElements('favourite')
+          .map<Element>((e) => Element.fromElement(e))
+          .toList();
 
       elements = elementsX!;
       savedlist = [...elements];

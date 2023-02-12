@@ -16,26 +16,29 @@ class DisplayScreen extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: ListView.builder(
-              controller: myModel.scrollController,
+            child: ReorderableListView.builder(
+              //controller: myModel.scrollController,
               reverse: false,
               itemCount: myModel.elements.length,
               itemBuilder: (context, i) {
-                return Card(
-                  child: ListTile(
-                    dense: true,
-                    leading: CachedNetworkImage(
-                      imageUrl: myModel.elements[i].thumb,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                    title: Text(myModel.elements[i].name,
-                        style: TextStyles.body.bold),
-                    trailing: Text('${myModel.elements[i].id}'),
+                return ListTile(
+                  key: ValueKey(myModel.elements[i].id),
+                  dense: true,
+                  selectedTileColor: Colors.orange,
+                  leading: CachedNetworkImage(
+                    imageUrl: myModel.elements[i].thumb,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.image_not_supported),
                   ),
+                  title: Text(myModel.elements[i].name,
+                      style: TextStyles.body.bold),
+                  trailing: Text(myModel.elements[i].id, style: const TextStyle(fontSize: 8),),
                 );
+              },
+              onReorder: (int oldIndex, int newIndex) {
+                myModel.swapItems(oldIndex, newIndex);
               },
             ),
           ),
@@ -44,55 +47,55 @@ class DisplayScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-            flex: 1,
-            child: ListView.builder(
-              controller: myModel.scrollController,
-              reverse: false,
-              itemCount: myModel.elements.length,
-              itemBuilder: (context, i) {
-                return Card(
-                  child: ListTile(
-                    dense: true,
-                    leading: CachedNetworkImage(
-                      imageUrl: myModel.elements[i].thumb,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                    flex: 1,
+                    child: ListView.builder(
+                      controller: myModel.scrollController,
+                      reverse: false,
+                      itemCount: myModel.elements.length,
+                      itemBuilder: (context, i) {
+                        return Card(
+                          child: ListTile(
+                            dense: true,
+                            leading: CachedNetworkImage(
+                              imageUrl: myModel.elements[i].thumb,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                            title: Text(myModel.elements[i].name,
+                                style: TextStyles.body.bold),
+                            trailing: Text('${myModel.elements[i].id}'),
+                          ),
+                        );
+                      },
                     ),
-                    title: Text(myModel.elements[i].name,
-                        style: TextStyles.body.bold),
-                    trailing: Text('${myModel.elements[i].id}'),
                   ),
-                );
-              },
-            ),
-          ),
                   Expanded(
-            flex: 1,
-            child: ListView.builder(
-              controller: myModel.scrollAController,
-              reverse: false,
-              itemCount: myModel.elements.length,
-              itemBuilder: (context, i) {
-                return Card(
-                  child: ListTile(
-                    dense: true,
-                    leading: CachedNetworkImage(
-                      imageUrl: myModel.elements[i].thumb,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                    flex: 1,
+                    child: ListView.builder(
+                      controller: myModel.scrollAController,
+                      reverse: false,
+                      itemCount: myModel.elements.length,
+                      itemBuilder: (context, i) {
+                        return Card(
+                          child: ListTile(
+                            dense: true,
+                            leading: CachedNetworkImage(
+                              imageUrl: myModel.elements[i].thumb,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                            title: Text(myModel.elements[i].name,
+                                style: TextStyles.body.bold),
+                            trailing: Text('${myModel.elements[i].id}'),
+                          ),
+                        );
+                      },
                     ),
-                    title: Text(myModel.elements[i].name,
-                        style: TextStyles.body.bold),
-                    trailing: Text('${myModel.elements[i].id}'),
                   ),
-                );
-              },
-            ),
-          ),
                   Expanded(
                       flex: 2,
                       child: Container(
