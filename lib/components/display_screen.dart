@@ -25,7 +25,7 @@ class DisplayScreen extends StatelessWidget {
                 return Slidable(
                   key: ValueKey(myModel.elements[i].id),
                   closeOnScroll: false,
-                  startActionPane: ActionPane(
+                  endActionPane: ActionPane(
                     motion: StretchMotion(),
                     children: [
                       SlidableAction(
@@ -48,7 +48,7 @@ class DisplayScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  endActionPane: ActionPane(
+                  startActionPane: ActionPane(
                     motion: const StretchMotion(),
                     children: [
                       SlidableAction(
@@ -70,7 +70,7 @@ class DisplayScreen extends StatelessWidget {
                         label: 'to B',
                       ),
                       SlidableAction(
-                        onPressed:  (BuildContext context) {
+                        onPressed: (BuildContext context) {
                           myModel.moveToSideBoard(i);
                         },
                         backgroundColor: Colors.green,
@@ -101,11 +101,7 @@ class DisplayScreen extends StatelessWidget {
                             const Icon(Icons.image_not_supported),
                       ),
                       title: Text(myModel.elements[i].name,
-                          style: TextStyles.body.bold),
-                      trailing: Text(
-                        myModel.elements[i].id,
-                        style: const TextStyle(fontSize: 8),
-                      ),
+                          style: TextStyles.bodySm),
                     ),
                   ),
                 );
@@ -123,24 +119,52 @@ class DisplayScreen extends StatelessWidget {
                       flex: 2,
                       child: Container(
                           color: Colors.red,
-                          child: ListView.builder(
-                            controller: myModel.scrollBController,
+                          child: ReorderableListView.builder(
+                            onReorder: (int oldIndex, int newIndex) {
+                              myModel.swapItems(oldIndex, newIndex);
+                            },
                             reverse: false,
                             itemCount: myModel.sideboard.length,
                             itemBuilder: (context, i) {
-                              return Card(
-                                child: ListTile(
-                                  dense: true,
-                                  leading: CachedNetworkImage(
-                                    imageUrl: myModel.sideboard[i].thumb,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                              return Slidable(
+                  key: ValueKey(myModel.elements[i].id),
+                  closeOnScroll: false,
+                                endActionPane: ActionPane(
+                                  motion: const StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (BuildContext context) {
+                                        myModel.setBookMarkA(i);
+                                      },
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.arrow_circle_left,
+                                      label: 'to A',
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (BuildContext context) {
+                                        myModel.setBookMarkB(i);
+                                      },
+                                      backgroundColor: Colors.blue,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.arrow_left,
+                                      label: 'to B',
+                                    ),
+                                  ],
+                                ),
+                                child: Card(
+                                  child: ListTile(
+                                    dense: true,
+                                    leading: CachedNetworkImage(
+                                      imageUrl: myModel.sideboard[i].thumb,
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    ),
+                                    title: Text(myModel.sideboard[i].name,
+                                        style: TextStyles.bodySm),
                                   ),
-                                  title: Text(myModel.sideboard[i].name,
-                                      style: TextStyles.body.bold),
-                                  trailing: Text(myModel.sideboard[i].id),
                                 ),
                               );
                             },
