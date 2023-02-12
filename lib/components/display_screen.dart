@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:elementary/style/styles.dart';
 import 'package:elementary/elements.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class DisplayScreen extends StatelessWidget {
   const DisplayScreen({
@@ -21,20 +22,92 @@ class DisplayScreen extends StatelessWidget {
               reverse: false,
               itemCount: myModel.elements.length,
               itemBuilder: (context, i) {
-                return ListTile(
+                return Slidable(
                   key: ValueKey(myModel.elements[i].id),
-                  dense: true,
-                  selectedTileColor: Colors.orange,
-                  leading: CachedNetworkImage(
-                    imageUrl: myModel.elements[i].thumb,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.image_not_supported),
+                  closeOnScroll: false,
+                  startActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          myModel.setBookMarkA(i);
+                        },
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.save,
+                        label: 'set A',
+                      ),
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          myModel.setBookMarkB(i);
+                        },
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        icon: Icons.save_sharp,
+                        label: 'set B',
+                      ),
+                    ],
                   ),
-                  title: Text(myModel.elements[i].name,
-                      style: TextStyles.body.bold),
-                  trailing: Text(myModel.elements[i].id, style: const TextStyle(fontSize: 8),),
+                  endActionPane: ActionPane(
+                    motion: const StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          myModel.moveToBookMarkA(i);
+                        },
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.switch_account_sharp,
+                        label: 'to A',
+                      ),
+                      SlidableAction(
+                        onPressed: (BuildContext context) {
+                          myModel.moveToBookMarkB(i);
+                        },
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        icon: Icons.switch_account,
+                        label: 'to B',
+                      ),
+                      SlidableAction(
+                        onPressed:  (BuildContext context) {
+                          myModel.moveToSideBoard(i);
+                        },
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        icon: Icons.swap_horiz,
+                        label: 'to sideboard',
+                      ),
+                    ],
+                  ),
+                  child: Card(
+                    key: ValueKey(myModel.elements[i].id),
+                    color: const Color.fromARGB(255, 238, 231, 231),
+                    child: ListTile(
+                      key: ValueKey(myModel.elements[i].id),
+                      dense: true,
+                      onTap: () => myModel.setSelectedElement(i),
+                      tileColor: (i == myModel.bookmarkA
+                          ? Colors.red
+                          : (i == myModel.bookmarkB
+                              ? Colors.blue
+                              : const Color.fromARGB(255, 238, 231, 231))),
+                      selectedColor: Colors.orange,
+                      leading: CachedNetworkImage(
+                        imageUrl: myModel.elements[i].thumb,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.image_not_supported),
+                      ),
+                      title: Text(myModel.elements[i].name,
+                          style: TextStyles.body.bold),
+                      trailing: Text(
+                        myModel.elements[i].id,
+                        style: const TextStyle(fontSize: 8),
+                      ),
+                    ),
+                  ),
                 );
               },
               onReorder: (int oldIndex, int newIndex) {
@@ -46,56 +119,6 @@ class DisplayScreen extends StatelessWidget {
               flex: 1,
               child: Column(
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                      controller: myModel.scrollController,
-                      reverse: false,
-                      itemCount: myModel.elements.length,
-                      itemBuilder: (context, i) {
-                        return Card(
-                          child: ListTile(
-                            dense: true,
-                            leading: CachedNetworkImage(
-                              imageUrl: myModel.elements[i].thumb,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            title: Text(myModel.elements[i].name,
-                                style: TextStyles.body.bold),
-                            trailing: Text('${myModel.elements[i].id}'),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: ListView.builder(
-                      controller: myModel.scrollAController,
-                      reverse: false,
-                      itemCount: myModel.elements.length,
-                      itemBuilder: (context, i) {
-                        return Card(
-                          child: ListTile(
-                            dense: true,
-                            leading: CachedNetworkImage(
-                              imageUrl: myModel.elements[i].thumb,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                            title: Text(myModel.elements[i].name,
-                                style: TextStyles.body.bold),
-                            trailing: Text('${myModel.elements[i].id}'),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                   Expanded(
                       flex: 2,
                       child: Container(
@@ -117,7 +140,7 @@ class DisplayScreen extends StatelessWidget {
                                   ),
                                   title: Text(myModel.sideboard[i].name,
                                       style: TextStyles.body.bold),
-                                  trailing: Text('${myModel.sideboard[i].id}'),
+                                  trailing: Text(myModel.sideboard[i].id),
                                 ),
                               );
                             },

@@ -75,6 +75,7 @@ class ElementsType with ChangeNotifier {
   List<Element> sideboard = <Element>[];
   int bookmarkA = -1;
   int bookmarkB = -1;
+  int selectedElement = -1;
   List<Element> savedlist = <Element>[];
   String notes = 'init';
 
@@ -141,6 +142,51 @@ class ElementsType with ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedElement(int index) {
+    selectedElement = index;
+    notifyListeners();
+  }
+
+  void setBookMarkA(int index) {
+    bookmarkA = index;
+    if (bookmarkB == index) {
+      bookmarkB = -1;
+    }
+    notifyListeners();
+  }
+
+  void setBookMarkB(int index) {
+    bookmarkB = index;
+    if (bookmarkA == index) {
+      bookmarkA = -1;
+    }
+    notifyListeners();
+  }
+
+  void moveToBookMarkA(int index) {
+    if (bookmarkA != -1) {
+      final element = elements.removeAt(index);
+      elements.insert(bookmarkA, element);
+      notifyListeners();
+    }
+  }
+
+  void moveToBookMarkB(int index) {
+    if (bookmarkB != -1) {
+      final element = elements.removeAt(index);
+      elements.insert(bookmarkB, element);
+      notifyListeners();
+    }
+  }
+
+  void moveToSideBoard(int index) {
+    final element = elements.removeAt(index);
+    if (index == bookmarkA) { bookmarkA = -1; }
+    if (index == bookmarkB) { bookmarkB = -1; }
+    sideboard.add(element);
+    notifyListeners();
+  }
+
   void clear() {
     elements.clear();
     sideboard.clear();
@@ -185,6 +231,8 @@ class ElementsType with ChangeNotifier {
     if (newIndex > oldIndex) newIndex--;
     final element = elements.removeAt(oldIndex);
     elements.insert(newIndex, element);
+    if (bookmarkA == oldIndex) { bookmarkA = newIndex; }
+    if (bookmarkB == oldIndex) { bookmarkB = newIndex; }
     notifyListeners();
   }
 
