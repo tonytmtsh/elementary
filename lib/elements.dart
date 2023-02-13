@@ -94,7 +94,7 @@ class ElementsType with ChangeNotifier {
     AnchorElement()
       ..href =
           '${Uri.dataFromString(xmlData, mimeType: 'text/plain', encoding: utf8)}'
-      ..download = 'favourites2.xml'
+      ..download = 'new_favourites.xml'
       ..style.display = 'none'
       ..click();
   }
