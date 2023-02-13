@@ -84,10 +84,11 @@ class ElementsType with ChangeNotifier {
   String notes = 'init';
 
   void saveFile() {
+    const HtmlEscape htmlEscape = HtmlEscape();
     String xmlData = "<favourites>\n";
     for (Element e in elements) {
       xmlData +=
-          "  <favourite name=\"${e.name}\" thumb=\"${e.thumb}\">${e.data}</favourite>\n";
+          "  <favourite name=\"${htmlEscape.convert(e.name)}\" thumb=\"${htmlEscape.convert(e.thumb)}\">${htmlEscape.convert(e.data)}</favourite>\n";
     }
     xmlData += "</favourites>\n";
 
