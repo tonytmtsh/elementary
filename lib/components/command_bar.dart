@@ -12,17 +12,16 @@ class CommandBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ElementsType>(builder: (context, myModel, child) {
-      return const ButtonBar(
-       buttonPadding: EdgeInsets.zero,
-       children: [
-       CommandButton(command: ElementCommands.clear),
-       CommandButton(command: ElementCommands.revert),
-       CommandButton(command: ElementCommands.addElement),
-       CommandButton(command: ElementCommands.removeElement),
-       CommandButton(command: ElementCommands.loadSample),
-       CommandButton(command: ElementCommands.loadSampleXml),
-       CommandButton(command: ElementCommands.loadFile),
-          ]);
+      return const ButtonBar(buttonPadding: EdgeInsets.zero, children: [
+        CommandButton(command: ElementCommands.loadFile),
+        // CommandButton(command: ElementCommands.clear),
+        CommandButton(command: ElementCommands.revert),
+        // CommandButton(command: ElementCommands.addElement),
+        CommandButton(command: ElementCommands.removeElement),
+        // CommandButton(command: ElementCommands.loadSample),
+        // CommandButton(command: ElementCommands.loadSampleXml),
+        CommandButton(command: ElementCommands.saveFile),
+      ]);
     });
   }
 }

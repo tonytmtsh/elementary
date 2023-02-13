@@ -14,13 +14,13 @@ class CommandButton extends StatelessWidget {
       padding: const EdgeInsets.all(2.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: command == ElementCommands.revert
+            backgroundColor: command == ElementCommands.removeElement
                 ? Colors.pink
-                : command == ElementCommands.clear
+                : command == ElementCommands.loadFile
                     ? Colors.orange
-                    : command == ElementCommands.addElement
-                        ? Colors.yellow
-                        : Colors.lightBlue),
+                    : command == ElementCommands.saveFile
+                        ? Colors.red
+                        : Colors.green),
         child: Text(commandText(command)),
         onPressed: () {
           switch (command) {
@@ -44,6 +44,9 @@ class CommandButton extends StatelessWidget {
               break;
             case ElementCommands.loadFile:
               myModel.loadFile();
+              break;
+            case ElementCommands.saveFile:
+              myModel.saveFile();
               break;
           }
         },

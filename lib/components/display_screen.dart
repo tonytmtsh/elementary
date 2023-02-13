@@ -26,7 +26,7 @@ class DisplayScreen extends StatelessWidget {
                   key: ValueKey(myModel.elements[i].id),
                   closeOnScroll: false,
                   endActionPane: ActionPane(
-                    motion: StretchMotion(),
+                    motion: const StretchMotion(),
                     children: [
                       SlidableAction(
                         onPressed: (BuildContext context) {
@@ -107,7 +107,7 @@ class DisplayScreen extends StatelessWidget {
                 );
               },
               onReorder: (int oldIndex, int newIndex) {
-                myModel.swapItems(oldIndex, newIndex);
+                myModel.swapElements(oldIndex, newIndex);
               },
             ),
           ),
@@ -118,23 +118,23 @@ class DisplayScreen extends StatelessWidget {
                   Expanded(
                       flex: 2,
                       child: Container(
-                          color: Colors.red,
+                          color: const Color.fromARGB(255, 115, 167, 123),
                           child: ReorderableListView.builder(
                             onReorder: (int oldIndex, int newIndex) {
-                              myModel.swapItems(oldIndex, newIndex);
+                              myModel.swapSideBoard(oldIndex, newIndex);
                             },
                             reverse: false,
                             itemCount: myModel.sideboard.length,
                             itemBuilder: (context, i) {
                               return Slidable(
-                  key: ValueKey(myModel.elements[i].id),
-                  closeOnScroll: false,
+                                key: ValueKey(myModel.elements[i].id),
+                                closeOnScroll: false,
                                 endActionPane: ActionPane(
                                   motion: const StretchMotion(),
                                   children: [
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
-                                        myModel.setBookMarkA(i);
+                                        myModel.moveSideBoardToBookMarkA(i);
                                       },
                                       backgroundColor: Colors.red,
                                       foregroundColor: Colors.white,
@@ -143,7 +143,7 @@ class DisplayScreen extends StatelessWidget {
                                     ),
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
-                                        myModel.setBookMarkB(i);
+                                        myModel.moveSideBoardToBookMarkB(i);
                                       },
                                       backgroundColor: Colors.blue,
                                       foregroundColor: Colors.white,

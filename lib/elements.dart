@@ -14,7 +14,8 @@ enum ElementCommands {
   removeElement,
   loadSample,
   loadSampleXml,
-  loadFile
+  loadFile,
+  saveFile,
 }
 
 String commandText(ElementCommands x) {
@@ -24,13 +25,13 @@ String commandText(ElementCommands x) {
       text = "clr";
       break;
     case ElementCommands.revert:
-      text = "undo";
+      text = "Revert";
       break;
     case ElementCommands.addElement:
       text = "add";
       break;
     case ElementCommands.removeElement:
-      text = "del";
+      text = "Delete";
       break;
     case ElementCommands.loadSample:
       text = "model";
@@ -39,7 +40,10 @@ String commandText(ElementCommands x) {
       text = "xml";
       break;
     case ElementCommands.loadFile:
-      text = "load";
+      text = "load file";
+      break;
+    case ElementCommands.saveFile:
+      text = "save file";
       break;
   }
   return text;
@@ -78,6 +82,175 @@ class ElementsType with ChangeNotifier {
   int selectedElement = -1;
   List<Element> savedlist = <Element>[];
   String notes = 'init';
+
+  void saveFile() {
+    String xmlData = "<favourites>\n";
+    for (Element e in elements) {
+      xmlData +=
+          "  <favourite name=\"${e.name}\" thumb=\"${e.thumb}\">${e.data}</favourite>\n";
+    }
+    xmlData += "</favourites>\n";
+
+    AnchorElement()
+      ..href =
+          '${Uri.dataFromString(xmlData, mimeType: 'text/plain', encoding: utf8)}'
+      ..download = 'favourites2.xml'
+      ..style.display = 'none'
+      ..click();
+  }
+
+  void setSelectedElement(int index) {
+    selectedElement = index;
+    notifyListeners();
+  }
+
+  void setBookMarkA(int index) {
+    bookmarkA = index;
+    if (bookmarkB == index) {
+      bookmarkB = -1;
+    }
+    notifyListeners();
+  }
+
+  void setBookMarkB(int index) {
+    bookmarkB = index;
+    if (bookmarkA == index) {
+      bookmarkA = -1;
+    }
+    notifyListeners();
+  }
+
+  void moveToBookMarkA(int index) {
+    if (bookmarkA != -1) {
+      final element = elements.removeAt(index);
+      elements.insert(bookmarkA, element);
+      notifyListeners();
+    }
+  }
+
+  void moveSideBoardToBookMarkA(int index) {
+    if (bookmarkA != -1) {
+      final element = sideboard.removeAt(index);
+      elements.insert(bookmarkA, element);
+      notifyListeners();
+    }
+  }
+
+  void moveToBookMarkB(int index) {
+    if (bookmarkB != -1) {
+      final element = elements.removeAt(index);
+      elements.insert(bookmarkB, element);
+      notifyListeners();
+    }
+  }
+
+  void moveSideBoardToBookMarkB(int index) {
+    if (bookmarkB != -1) {
+      final element = sideboard.removeAt(index);
+      elements.insert(bookmarkB, element);
+      notifyListeners();
+    }
+  }
+
+  void moveToSideBoard(int index) {
+    final element = elements.removeAt(index);
+    if (index == bookmarkA) {
+      bookmarkA = -1;
+    }
+    if (index == bookmarkB) {
+      bookmarkB = -1;
+    }
+    sideboard.add(element);
+    notifyListeners();
+  }
+
+  void clear() {
+    elements.clear();
+    sideboard.clear();
+    bookmarkA = -1;
+    bookmarkB = -1;
+    notes = 'cleared';
+    notifyListeners();
+  }
+
+  void revert() {
+    elements.clear();
+    sideboard.clear();
+    elements = [...savedlist];
+    notifyListeners();
+  }
+
+  void removeElement() {
+    Element x = elements[0];
+    sideboard.add(x);
+    elements.removeAt(0);
+    notes = 'removed element';
+    notifyListeners();
+  }
+
+  void swapElements(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+    final element = elements.removeAt(oldIndex);
+    elements.insert(newIndex, element);
+    if (bookmarkA == oldIndex) {
+      bookmarkA = newIndex;
+    }
+    if (bookmarkB == oldIndex) {
+      bookmarkB = newIndex;
+    }
+    notifyListeners();
+  }
+
+  void swapSideBoard(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+    final element = sideboard.removeAt(oldIndex);
+    sideboard.insert(newIndex, element);
+    notifyListeners();
+  }
+
+  Future<void> loadFile() async {
+    var result = await FilePicker.platform.pickFiles(
+        dialogTitle: "Choose XML file to load",
+        type: FileType.custom,
+        allowMultiple: false,
+        allowedExtensions: ['xml']);
+    if (result != null) {
+      clear();
+      PlatformFile file = result.files.first;
+      String xmlString = String.fromCharCodes(file.bytes as Iterable<int>);
+      notes = 'file added ${file.size} string: ${xmlString.length}.';
+
+      XmlElement? xdoc = XmlDocument.parse(xmlString).getElement('favourites');
+
+      var elementsX = xdoc
+          ?.findElements('favourite')
+          .map<Element>((e) => Element.fromElement(e))
+          .toList();
+
+      elements = elementsX!;
+      savedlist = [...elements];
+
+      notifyListeners();
+    }
+  }
+
+  void addElement() {
+    elements.add(Element(
+        '1',
+        'added',
+        'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183405/Telemundo.png',
+        'testdata'));
+    notes = 'added item';
+    notifyListeners();
+  }
+
+  void loadSample() {
+    clear();
+    createSampleData();
+    savedlist = [...elements];
+    notes = "sample loaded";
+    notifyListeners();
+  }
 
   void createSampleData() {
     elements.add(Element(
@@ -140,125 +313,5 @@ class ElementsType with ChangeNotifier {
     sideboard.clear();
     savedlist = [...elements];
     notifyListeners();
-  }
-
-  void setSelectedElement(int index) {
-    selectedElement = index;
-    notifyListeners();
-  }
-
-  void setBookMarkA(int index) {
-    bookmarkA = index;
-    if (bookmarkB == index) {
-      bookmarkB = -1;
-    }
-    notifyListeners();
-  }
-
-  void setBookMarkB(int index) {
-    bookmarkB = index;
-    if (bookmarkA == index) {
-      bookmarkA = -1;
-    }
-    notifyListeners();
-  }
-
-  void moveToBookMarkA(int index) {
-    if (bookmarkA != -1) {
-      final element = elements.removeAt(index);
-      elements.insert(bookmarkA, element);
-      notifyListeners();
-    }
-  }
-
-  void moveToBookMarkB(int index) {
-    if (bookmarkB != -1) {
-      final element = elements.removeAt(index);
-      elements.insert(bookmarkB, element);
-      notifyListeners();
-    }
-  }
-
-  void moveToSideBoard(int index) {
-    final element = elements.removeAt(index);
-    if (index == bookmarkA) { bookmarkA = -1; }
-    if (index == bookmarkB) { bookmarkB = -1; }
-    sideboard.add(element);
-    notifyListeners();
-  }
-
-  void clear() {
-    elements.clear();
-    sideboard.clear();
-    notes = 'cleared';
-    notifyListeners();
-  }
-
-  void revert() {
-    elements.clear();
-    sideboard.clear();
-    elements = [...savedlist];
-    notifyListeners();
-  }
-
-  void addElement() {
-    elements.add(Element(
-        '1',
-        'added',
-        'https://bcassetcdn.com/public/blog/wp-content/uploads/2021/11/06183405/Telemundo.png',
-        'testdata'));
-    notes = 'added item';
-    notifyListeners();
-  }
-
-  void removeElement() {
-    Element x = elements[0];
-    sideboard.add(x);
-    elements.removeAt(0);
-    notes = 'removed element';
-    notifyListeners();
-  }
-
-  void loadSample() {
-    clear();
-    createSampleData();
-    savedlist = [...elements];
-    notes = "sample loaded";
-    notifyListeners();
-  }
-
-  void swapItems(int oldIndex, int newIndex) {
-    if (newIndex > oldIndex) newIndex--;
-    final element = elements.removeAt(oldIndex);
-    elements.insert(newIndex, element);
-    if (bookmarkA == oldIndex) { bookmarkA = newIndex; }
-    if (bookmarkB == oldIndex) { bookmarkB = newIndex; }
-    notifyListeners();
-  }
-
-  Future<void> loadFile() async {
-    var result = await FilePicker.platform.pickFiles(
-        dialogTitle: "Choose XML file to load",
-        type: FileType.custom,
-        allowMultiple: false,
-        allowedExtensions: ['xml']);
-    if (result != null) {
-      clear();
-      PlatformFile file = result.files.first;
-      String xmlString = String.fromCharCodes(file.bytes as Iterable<int>);
-      notes = 'file added ${file.size} string: ${xmlString.length}.';
-
-      XmlElement? xdoc = XmlDocument.parse(xmlString).getElement('favourites');
-
-      var elementsX = xdoc
-          ?.findElements('favourite')
-          .map<Element>((e) => Element.fromElement(e))
-          .toList();
-
-      elements = elementsX!;
-      savedlist = [...elements];
-
-      notifyListeners();
-    }
   }
 }
