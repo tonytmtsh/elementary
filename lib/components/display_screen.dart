@@ -18,8 +18,8 @@ class DisplayScreen extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ReorderableListView.builder(
-              //controller: myModel.scrollController,
               reverse: false,
+              scrollController: myModel.scrollController,
               itemCount: myModel.elements.length,
               itemBuilder: (context, i) {
                 return Slidable(
@@ -82,7 +82,9 @@ class DisplayScreen extends StatelessWidget {
                   ),
                   child: Card(
                     key: ValueKey(myModel.elements[i].id),
-                    color: const Color.fromARGB(255, 238, 231, 231),
+                    color: (myModel.selectedElement == i)
+                        ? Colors.purple
+                        : const Color.fromARGB(255, 238, 231, 231),
                     child: ListTile(
                       key: ValueKey(myModel.elements[i].id),
                       dense: true,
@@ -93,6 +95,7 @@ class DisplayScreen extends StatelessWidget {
                               ? Colors.blue
                               : const Color.fromARGB(255, 238, 231, 231))),
                       selectedColor: Colors.orange,
+                      selected: (i == myModel.selectedElement),
                       leading: CachedNetworkImage(
                         imageUrl: myModel.elements[i].thumb,
                         placeholder: (context, url) =>

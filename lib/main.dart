@@ -17,10 +17,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<ElementsType>(
       create: (context) => ElementsType(),
       child: const MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Elementary </XML>',
-          home: HomePage(),
-        ),
+        debugShowCheckedModeBanner: false,
+        title: '</XML>',
+        home: HomePage(),
+      ),
     );
   }
 }

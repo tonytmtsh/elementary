@@ -48,6 +48,12 @@ class CommandButton extends StatelessWidget {
             case ElementCommands.saveFile:
               myModel.saveFile();
               break;
+            case ElementCommands.positionTop:
+              myModel.positionTop();
+              break;
+            case ElementCommands.positionBottom:
+              myModel.positionEnd();
+              break;
           }
         },
       ),

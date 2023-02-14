@@ -16,6 +16,10 @@ enum ElementCommands {
   loadSampleXml,
   loadFile,
   saveFile,
+  positionTop,
+  positionBottom,
+  gotoA,
+  gotoB,
 }
 
 String commandText(ElementCommands x) {
@@ -45,6 +49,18 @@ String commandText(ElementCommands x) {
     case ElementCommands.saveFile:
       text = "save file";
       break;
+    case ElementCommands.positionTop:
+      text = "top";
+      break;
+    case ElementCommands.positionBottom:
+      text = "end";
+      break;
+    case ElementCommands.gotoA:
+      text = "A";
+      break;
+    case ElementCommands.gotoB:
+      text = "B";
+      break;
   }
   return text;
 }
@@ -70,8 +86,6 @@ class Element {
 
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
-  ScrollController scrollAController = ScrollController();
-  ScrollController scrollBController = ScrollController();
 
   String appTitle = "Elementary </XML>";
 
@@ -79,9 +93,49 @@ class ElementsType with ChangeNotifier {
   List<Element> sideboard = <Element>[];
   int bookmarkA = -1;
   int bookmarkB = -1;
+  //late RenderObject bookmarkAobj;
+  //late RenderObject bookmarkBobj;
+
   int selectedElement = -1;
   List<Element> savedlist = <Element>[];
   String notes = 'init';
+
+  int idToIndex(String id) {
+    final index = elements.lastIndexWhere((element) => element.id == id);
+    return index;
+  }
+
+  String indexToId(int index) {
+    return elements[index].id;
+  }
+
+  void positionTop() {
+    scrollController.animateTo(scrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+  }
+
+  void positionEnd() {
+    scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+  }
+
+  void positionA(BuildContext context) {
+    if (bookmarkA != -1) {
+//      scrollController.animateTo(
+//          scrollController.position.ensureVisible(bookmarkAobj) as double,
+//          duration: const Duration(milliseconds: 200),
+//          curve: Curves.easeIn);
+    }
+  }
+
+  void positionB(BuildContext context) {
+    if (bookmarkB != -1) {
+//      scrollController.animateTo(
+//          scrollController.position.ensureVisible(bookmarkBobj) as double,
+//          duration: const Duration(milliseconds: 200),
+//          curve: Curves.easeIn);
+    }
+  }
 
   void saveFile() {
     const HtmlEscape htmlEscape = HtmlEscape();
@@ -123,32 +177,40 @@ class ElementsType with ChangeNotifier {
 
   void moveToBookMarkA(int index) {
     if (bookmarkA != -1) {
+      String saveId = indexToId(bookmarkA);
       final element = elements.removeAt(index);
       elements.insert(bookmarkA, element);
+      bookmarkA = idToIndex(saveId);
       notifyListeners();
     }
   }
 
   void moveSideBoardToBookMarkA(int index) {
     if (bookmarkA != -1) {
+      String saveId = indexToId(bookmarkA);
       final element = sideboard.removeAt(index);
       elements.insert(bookmarkA, element);
+      bookmarkA = idToIndex(saveId);
       notifyListeners();
     }
   }
 
   void moveToBookMarkB(int index) {
     if (bookmarkB != -1) {
+      String saveId = indexToId(bookmarkB);
       final element = elements.removeAt(index);
       elements.insert(bookmarkB, element);
+      bookmarkB = idToIndex(saveId);
       notifyListeners();
     }
   }
 
   void moveSideBoardToBookMarkB(int index) {
     if (bookmarkB != -1) {
+      String saveId = indexToId(bookmarkB);
       final element = sideboard.removeAt(index);
       elements.insert(bookmarkB, element);
+      bookmarkA = idToIndex(saveId);
       notifyListeners();
     }
   }
