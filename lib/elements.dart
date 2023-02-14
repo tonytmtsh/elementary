@@ -138,12 +138,17 @@ class ElementsType with ChangeNotifier {
   }
 
   void saveFile() {
-    const HtmlEscapeMode htmlMode = HtmlEscapeMode(name: "custom", escapeLtGt: true, escapeApos: true, escapeQuot: true, escapeSlash: false);
+    const HtmlEscapeMode htmlMode = HtmlEscapeMode(
+        name: "custom",
+        escapeLtGt: true,
+        escapeApos: true,
+        escapeQuot: true,
+        escapeSlash: false);
     const HtmlEscape htmlEscape = HtmlEscape(htmlMode);
     String xmlData = "<favourites>\n";
     for (Element e in elements) {
       xmlData +=
-          "    <favourite name=\"${(htmlEscape.convert(e.name)).replaceAll(String.fromCharCode(0x0A),"&#x0A;").replaceAll("&#39;","&apos;")}\" thumb=\"${htmlEscape.convert(e.thumb)}\">${htmlEscape.convert(e.data)}</favourite>\n";
+          "    <favourite name=\"${(htmlEscape.convert(e.name)).replaceAll(String.fromCharCode(0x0A), "&#x0A;").replaceAll("&#39;", "&apos;")}\"${(e.thumb != "") ? " thumb=\"${htmlEscape.convert(e.thumb)}\"" : ""}>${htmlEscape.convert(e.data)}</favourite>\n";
     }
     xmlData += "</favourites>\n";
 
