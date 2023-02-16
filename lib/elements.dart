@@ -250,11 +250,13 @@ class ElementsType with ChangeNotifier {
   }
 
   void removeElement() {
-    Element x = elements[0];
-    sideboard.add(x);
-    elements.removeAt(0);
-    notes = 'removed element';
-    notifyListeners();
+    if (selectedElement != -1) {
+      Element x = elements[selectedElement];
+      sideboard.add(x);
+      elements.removeAt(0);
+      notes = 'removed element';
+      notifyListeners();
+    }
   }
 
   void swapElements(int oldIndex, int newIndex) {
