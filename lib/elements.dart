@@ -252,7 +252,6 @@ class ElementsType with ChangeNotifier {
   void removeElement() {
     if (selectedElement != -1) {
       Element x = elements[selectedElement];
-      sideboard.add(x);
       elements.removeAt(0);
       notes = 'removed element';
       notifyListeners();

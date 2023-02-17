@@ -53,19 +53,31 @@ class DisplayScreen extends StatelessWidget {
                     children: [
                       SlidableAction(
                         onPressed: (BuildContext context) {
-                          myModel.moveToBookMarkA(i);
+                          (myModel.bookmarkA == -1)
+                              ? null
+                              : myModel.moveToBookMarkA(i);
                         },
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
+                        backgroundColor: (myModel.bookmarkA == -1)
+                            ? Colors.black12
+                            : Colors.red,
+                        foregroundColor: (myModel.bookmarkA == -1)
+                            ? Colors.grey
+                            : Colors.white,
                         icon: Icons.switch_account_sharp,
                         label: 'to A',
                       ),
                       SlidableAction(
                         onPressed: (BuildContext context) {
-                          myModel.moveToBookMarkB(i);
+                          (myModel.bookmarkB == -1)
+                              ? null
+                              : myModel.moveToBookMarkB(i);
                         },
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
+                        backgroundColor: (myModel.bookmarkB == -1)
+                            ? Colors.black12
+                            : Colors.blue,
+                        foregroundColor: (myModel.bookmarkB == -1)
+                            ? Colors.grey
+                            : Colors.white,
                         icon: Icons.switch_account,
                         label: 'to B',
                       ),
@@ -137,19 +149,33 @@ class DisplayScreen extends StatelessWidget {
                                   children: [
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
-                                        myModel.moveSideBoardToBookMarkA(i);
+                                        (myModel.bookmarkA == -1)
+                                            ? null
+                                            : myModel
+                                                .moveSideBoardToBookMarkA(i);
                                       },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
+                                      backgroundColor: (myModel.bookmarkA == -1)
+                                          ? Colors.black12
+                                          : Colors.red,
+                                      foregroundColor: (myModel.bookmarkA == -1)
+                                          ? Colors.grey
+                                          : Colors.white,
                                       icon: Icons.arrow_circle_left,
                                       label: 'to A',
                                     ),
                                     SlidableAction(
                                       onPressed: (BuildContext context) {
-                                        myModel.moveSideBoardToBookMarkB(i);
+                                        (myModel.bookmarkB == -1)
+                                            ? null
+                                            : myModel
+                                                .moveSideBoardToBookMarkB(i);
                                       },
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
+                                      backgroundColor: (myModel.bookmarkB == -1)
+                                          ? Colors.black12
+                                          : Colors.blue,
+                                      foregroundColor: (myModel.bookmarkB == -1)
+                                          ? Colors.grey
+                                          : Colors.white,
                                       icon: Icons.arrow_left,
                                       label: 'to B',
                                     ),
