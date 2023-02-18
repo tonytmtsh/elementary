@@ -17,6 +17,28 @@ class DisplayScreen extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
+            child: Container(
+              color: const Color.fromARGB(156, 224, 208, 58),
+              child: ListView.builder(
+                  reverse: false,
+                  itemCount: myModel.categories.length,
+                  itemBuilder: (context, i) {
+                    return Card(
+                      color: const Color.fromARGB(156, 224, 208, 58),
+                      child: ListTile(
+                        onTap: () {
+                          myModel.positionCategory(myModel.categories[i].id);
+                        },
+                        dense: true,
+                        title: Text(myModel.categories[i].title,
+                            style: TextStyles.bodySm),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+          Expanded(
+            flex: 2,
             child: ReorderableListView.builder(
               reverse: false,
               scrollController: myModel.scrollController,
@@ -94,29 +116,38 @@ class DisplayScreen extends StatelessWidget {
                   ),
                   child: Card(
                     key: ValueKey(myModel.elements[i].id),
-                    color: (myModel.selectedElement == i)
-                        ? Colors.purple
-                        : const Color.fromARGB(255, 238, 231, 231),
-                    child: ListTile(
-                      key: ValueKey(myModel.elements[i].id),
-                      dense: true,
-                      onTap: () => myModel.setSelectedElement(i),
-                      tileColor: (i == myModel.bookmarkA
-                          ? Colors.red
-                          : (i == myModel.bookmarkB
-                              ? Colors.blue
-                              : const Color.fromARGB(255, 238, 231, 231))),
-                      selectedColor: Colors.orange,
-                      selected: (i == myModel.selectedElement),
-                      leading: CachedNetworkImage(
-                        imageUrl: myModel.elements[i].thumb,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.image_not_supported),
+                    //color: Colors.grey,
+                    child: SizedBox(
+                      height: 40,
+                      child: ListTile(
+                        key: ValueKey(myModel.elements[i].id),
+                        dense: true,
+                        onTap: () => myModel.setSelectedElement(i),
+                        tileColor: (i == myModel.bookmarkA
+                            ? Colors.red
+                            : (i == myModel.bookmarkB
+                                ? Colors.blue
+                                : (myModel.selectedElement == i)
+                                    ? Colors.purple
+                                    : (myModel.elements[i].name
+                                            .startsWith("[COLORyellow]"))
+                                        ? const Color.fromARGB(
+                                            156, 224, 208, 58)
+                                        : const Color.fromARGB(
+                                            255, 238, 231, 231))),
+                        selectedColor: Colors.orange,
+                        selected: (i == myModel.selectedElement),
+                        leading: CachedNetworkImage(
+                          height: 36,
+                          imageUrl: myModel.elements[i].thumb,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.image_not_supported),
+                        ),
+                        title: Text(myModel.elements[i].name,
+                            style: TextStyles.bodySm),
                       ),
-                      title: Text(myModel.elements[i].name,
-                          style: TextStyles.bodySm),
                     ),
                   ),
                 );
@@ -127,7 +158,7 @@ class DisplayScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-              flex: 1,
+              flex: 2,
               child: Column(
                 children: [
                   Expanded(

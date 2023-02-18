@@ -11,18 +11,29 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-          title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Text('</XML>'),
-              CommandBar(),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          title: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text('</XML>'),
+                      CommandBar(),
+                    ],
+                  ),
+                ],
+              ),
+              Row(children: const [
+                Expanded(flex: 1, child: Text('Category')),
+                Expanded(flex: 2, child: Text('Item')),
+                Expanded(flex: 2, child: Text('Side Board'))
+              ]),
             ],
-          ),
-        ],
-      )),
+          )),
       body: const DisplayScreen(),
     );
   }

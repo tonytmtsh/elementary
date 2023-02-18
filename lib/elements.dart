@@ -84,6 +84,13 @@ class Element {
   }
 }
 
+class Category {
+  String id;
+  String title;
+
+  Category(this.id, this.title);
+}
+
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
 
@@ -99,6 +106,14 @@ class ElementsType with ChangeNotifier {
   int selectedElement = -1;
   List<Element> savedlist = <Element>[];
   String notes = 'init';
+
+  List<Category> get categories {
+    List<Category> c = elements
+        .where((e) => e.name.startsWith("[COLORyellow]"))
+        .map((element) => Category(element.id, element.name))
+        .toList();
+    return c;
+  }
 
   int idToIndex(String id) {
     final index = elements.lastIndexWhere((element) => element.id == id);
@@ -116,6 +131,12 @@ class ElementsType with ChangeNotifier {
 
   void positionEnd() {
     scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+  }
+
+  void positionCategory(String catId) {
+    int itemnumber = idToIndex(catId);
+    scrollController.animateTo(itemnumber * 48,
         duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 
