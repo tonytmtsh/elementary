@@ -39,122 +39,128 @@ class DisplayScreen extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: ReorderableListView.builder(
-              reverse: false,
-              scrollController: myModel.scrollController,
-              itemCount: myModel.elements.length,
-              itemBuilder: (context, i) {
-                return Slidable(
-                  key: ValueKey(myModel.elements[i].id),
-                  closeOnScroll: false,
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          myModel.setBookMarkA(i);
-                        },
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        icon: Icons.save,
-                        label: 'set A',
+            child: Stack(
+              children: [
+                (myModel.editMode) ? const Text("EDIT MODE") : const Text(""),
+                ReorderableListView.builder(
+                  reverse: false,
+                  scrollController: myModel.scrollController,
+                  itemCount: myModel.elements.length,
+                  itemBuilder: (context, i) {
+                    return Slidable(
+                      key: ValueKey(myModel.elements[i].id),
+                      closeOnScroll: false,
+                      endActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              myModel.setBookMarkA(i);
+                            },
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.save,
+                            label: 'set A',
+                          ),
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              myModel.setBookMarkB(i);
+                            },
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            icon: Icons.save_sharp,
+                            label: 'set B',
+                          ),
+                        ],
                       ),
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          myModel.setBookMarkB(i);
-                        },
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                        icon: Icons.save_sharp,
-                        label: 'set B',
+                      startActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              (myModel.bookmarkA == -1)
+                                  ? null
+                                  : myModel.moveToBookMarkA(i);
+                            },
+                            backgroundColor: (myModel.bookmarkA == -1)
+                                ? Colors.black12
+                                : Colors.red,
+                            foregroundColor: (myModel.bookmarkA == -1)
+                                ? Colors.grey
+                                : Colors.white,
+                            icon: Icons.switch_account_sharp,
+                            label: 'to A',
+                          ),
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              (myModel.bookmarkB == -1)
+                                  ? null
+                                  : myModel.moveToBookMarkB(i);
+                            },
+                            backgroundColor: (myModel.bookmarkB == -1)
+                                ? Colors.black12
+                                : Colors.blue,
+                            foregroundColor: (myModel.bookmarkB == -1)
+                                ? Colors.grey
+                                : Colors.white,
+                            icon: Icons.switch_account,
+                            label: 'to B',
+                          ),
+                          SlidableAction(
+                            onPressed: (BuildContext context) {
+                              myModel.moveToSideBoard(i);
+                            },
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            icon: Icons.swap_horiz,
+                            label: 'to sideboard',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  startActionPane: ActionPane(
-                    motion: const StretchMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          (myModel.bookmarkA == -1)
-                              ? null
-                              : myModel.moveToBookMarkA(i);
-                        },
-                        backgroundColor: (myModel.bookmarkA == -1)
-                            ? Colors.black12
-                            : Colors.red,
-                        foregroundColor: (myModel.bookmarkA == -1)
-                            ? Colors.grey
-                            : Colors.white,
-                        icon: Icons.switch_account_sharp,
-                        label: 'to A',
-                      ),
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          (myModel.bookmarkB == -1)
-                              ? null
-                              : myModel.moveToBookMarkB(i);
-                        },
-                        backgroundColor: (myModel.bookmarkB == -1)
-                            ? Colors.black12
-                            : Colors.blue,
-                        foregroundColor: (myModel.bookmarkB == -1)
-                            ? Colors.grey
-                            : Colors.white,
-                        icon: Icons.switch_account,
-                        label: 'to B',
-                      ),
-                      SlidableAction(
-                        onPressed: (BuildContext context) {
-                          myModel.moveToSideBoard(i);
-                        },
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        icon: Icons.swap_horiz,
-                        label: 'to sideboard',
-                      ),
-                    ],
-                  ),
-                  child: Card(
-                    key: ValueKey(myModel.elements[i].id),
-                    //color: Colors.grey,
-                    child: SizedBox(
-                      height: 40,
-                      child: ListTile(
+                      child: Card(
                         key: ValueKey(myModel.elements[i].id),
-                        dense: true,
-                        onTap: () => myModel.setSelectedElement(i),
-                        tileColor: (i == myModel.bookmarkA
-                            ? Colors.red
-                            : (i == myModel.bookmarkB
-                                ? Colors.blue
-                                : (myModel.selectedElement == i)
-                                    ? Colors.purple
-                                    : (myModel.elements[i].name
-                                            .startsWith("[COLORyellow]"))
-                                        ? const Color.fromARGB(
-                                            156, 224, 208, 58)
-                                        : const Color.fromARGB(
-                                            255, 238, 231, 231))),
-                        selectedColor: Colors.orange,
-                        selected: (i == myModel.selectedElement),
-                        leading: CachedNetworkImage(
-                          height: 36,
-                          imageUrl: myModel.elements[i].thumb,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.image_not_supported),
+                        //color: Colors.grey,
+                        child: SizedBox(
+                          height: 40,
+                          child: ListTile(
+                            key: ValueKey(myModel.elements[i].id),
+                            dense: true,
+                            onTap: () => myModel.setSelectedElement(i),
+                            onLongPress: () => myModel.enterEditMode(i),
+                            tileColor: (i == myModel.bookmarkA
+                                ? Colors.red
+                                : (i == myModel.bookmarkB
+                                    ? Colors.blue
+                                    : (myModel.selectedElement == i)
+                                        ? Colors.purple
+                                        : (myModel.elements[i].name
+                                                .startsWith("[COLORyellow]"))
+                                            ? const Color.fromARGB(
+                                                156, 224, 208, 58)
+                                            : const Color.fromARGB(
+                                                255, 238, 231, 231))),
+                            selectedColor: Colors.orange,
+                            selected: (i == myModel.selectedElement),
+                            leading: CachedNetworkImage(
+                              height: 36,
+                              imageUrl: myModel.elements[i].thumb,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.image_not_supported),
+                            ),
+                            title: Text(myModel.elements[i].name,
+                                style: TextStyles.bodySm),
+                          ),
                         ),
-                        title: Text(myModel.elements[i].name,
-                            style: TextStyles.bodySm),
                       ),
-                    ),
-                  ),
-                );
-              },
-              onReorder: (int oldIndex, int newIndex) {
-                myModel.swapElements(oldIndex, newIndex);
-              },
+                    );
+                  },
+                  onReorder: (int oldIndex, int newIndex) {
+                    myModel.swapElements(oldIndex, newIndex);
+                  },
+                )
+              ],
             ),
           ),
           Expanded(

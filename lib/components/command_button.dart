@@ -68,6 +68,9 @@ class CommandButton extends StatelessWidget {
               case ElementCommands.gotoB:
                 // TODO: Handle this case.
                 break;
+              case ElementCommands.editElement:
+                // TODO: Handle this case.
+                break;
             }
           }
         },

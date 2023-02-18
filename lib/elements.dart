@@ -20,6 +20,7 @@ enum ElementCommands {
   positionBottom,
   gotoA,
   gotoB,
+  editElement,
 }
 
 String commandText(ElementCommands x) {
@@ -61,6 +62,9 @@ String commandText(ElementCommands x) {
     case ElementCommands.gotoB:
       text = "B";
       break;
+    case ElementCommands.editElement:
+      text = "edit";
+      break;
   }
   return text;
 }
@@ -91,6 +95,7 @@ class Category {
   Category(this.id, this.title);
 }
 
+
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
 
@@ -104,6 +109,11 @@ class ElementsType with ChangeNotifier {
   //late RenderObject bookmarkBobj;
 
   int selectedElement = -1;
+
+  bool editMode = false;
+  String editThumb = "";
+  String editName = "";
+
   List<Element> savedlist = <Element>[];
   String notes = 'init';
 
@@ -113,6 +123,27 @@ class ElementsType with ChangeNotifier {
         .map((element) => Category(element.id, element.name))
         .toList();
     return c;
+  }
+
+  void enterEditMode(int index) {
+    if (index != -1) {
+     editMode = true;
+     notifyListeners();
+   }
+  }
+
+  void updateItem(int index, String thumb, String name) {
+    if (index != -1) {
+      elements[index].thumb = thumb;
+      elements[index].name = name;
+      editMode = false;
+      notifyListeners();
+    }
+  }
+
+  void cancelEditMode(int index) {
+    editMode = false;
+    notifyListeners();
   }
 
   int idToIndex(String id) {
