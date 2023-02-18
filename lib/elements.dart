@@ -111,6 +111,7 @@ class ElementsType with ChangeNotifier {
   int selectedElement = -1;
 
   bool editMode = false;
+  int editIndex = -1;
   String editThumb = "";
   String editName = "";
 
@@ -128,6 +129,9 @@ class ElementsType with ChangeNotifier {
   void enterEditMode(int index) {
     if (index != -1) {
      editMode = true;
+     editIndex = index;
+     editName = elements[index].name;
+     editThumb = elements[index].thumb;
      notifyListeners();
    }
   }
@@ -141,7 +145,7 @@ class ElementsType with ChangeNotifier {
     }
   }
 
-  void cancelEditMode(int index) {
+  void cancelEditMode() {
     editMode = false;
     notifyListeners();
   }

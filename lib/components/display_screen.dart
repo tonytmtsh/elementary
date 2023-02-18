@@ -40,8 +40,8 @@ class DisplayScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Stack(
+              
               children: [
-                (myModel.editMode) ? const Text("EDIT MODE") : const Text(""),
                 ReorderableListView.builder(
                   reverse: false,
                   scrollController: myModel.scrollController,
@@ -159,7 +159,21 @@ class DisplayScreen extends StatelessWidget {
                   onReorder: (int oldIndex, int newIndex) {
                     myModel.swapElements(oldIndex, newIndex);
                   },
-                )
+                ),
+                (myModel.editMode) ? AlertDialog(
+                  title: const Text("Edit Element"),
+                  actions: [
+                    ElevatedButton(onPressed: () { myModel.cancelEditMode(); }, child: const Text("Cancel")),
+                    ElevatedButton(onPressed: () { myModel.updateItem(myModel.editIndex, myModel.editThumb, myModel.editName); }, child: const Text("Save")),
+                  ],
+                  content: Column(
+                    children:  [
+                      const Text("Edit Fields Go Here"),
+                      Text(myModel.editName),
+                      Text(myModel.editThumb),
+                    ],
+                  ),
+                ) : const Text(""),                
               ],
             ),
           ),
