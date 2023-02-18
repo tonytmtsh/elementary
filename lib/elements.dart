@@ -216,7 +216,7 @@ class ElementsType with ChangeNotifier {
       String saveId = indexToId(bookmarkB);
       final element = sideboard.removeAt(index);
       elements.insert(bookmarkB, element);
-      bookmarkA = idToIndex(saveId);
+      bookmarkB = idToIndex(saveId);
       notifyListeners();
     }
   }
