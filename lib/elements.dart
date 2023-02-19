@@ -95,7 +95,6 @@ class Category {
   Category(this.id, this.title);
 }
 
-
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
 
@@ -120,7 +119,8 @@ class ElementsType with ChangeNotifier {
 
   List<Category> get categories {
     List<Category> c = elements
-        .where((e) => e.name.startsWith("[COLORyellow]"))
+        .where((e) => ((e.name.startsWith("[COLORyellow]")) &&
+            (e.name.indexOf("[COLORyellow]", 1) == -1)))
         .map((element) => Category(element.id, element.name))
         .toList();
     return c;
@@ -128,12 +128,12 @@ class ElementsType with ChangeNotifier {
 
   void enterEditMode(int index) {
     if (index != -1) {
-     editMode = true;
-     editIndex = index;
-     editName = elements[index].name;
-     editThumb = elements[index].thumb;
-     notifyListeners();
-   }
+      editMode = true;
+      editIndex = index;
+      editName = elements[index].name;
+      editThumb = elements[index].thumb;
+      notifyListeners();
+    }
   }
 
   void updateItem(int index, String thumb, String name) {
