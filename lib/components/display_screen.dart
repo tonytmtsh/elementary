@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:elementary/style/styles.dart';
 import 'package:elementary/elements.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'dart:js' as js;
 
 class DisplayScreen extends StatelessWidget {
   const DisplayScreen({
@@ -40,7 +41,6 @@ class DisplayScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Stack(
-              
               children: [
                 ReorderableListView.builder(
                   reverse: false,
@@ -160,20 +160,69 @@ class DisplayScreen extends StatelessWidget {
                     myModel.swapElements(oldIndex, newIndex);
                   },
                 ),
-                (myModel.editMode) ? AlertDialog(
-                  title: const Text("Edit Element"),
-                  actions: [
-                    ElevatedButton(onPressed: () { myModel.cancelEditMode(); }, child: const Text("Cancel")),
-                    ElevatedButton(onPressed: () { myModel.updateItem(myModel.editIndex, myModel.editThumb, myModel.editName); }, child: const Text("Save")),
-                  ],
-                  content: Column(
-                    children:  [
-                      const Text("Edit Fields Go Here"),
-                      Text(myModel.editName),
-                      Text(myModel.editThumb),
-                    ],
-                  ),
-                ) : const Text(""),                
+                (myModel.editMode)
+                    ? AlertDialog(
+                        title: const Text("Edit Element"),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: () {
+                                myModel.cancelEditMode();
+                              },
+                              child: const Text("Cancel")),
+                          ElevatedButton(
+                              onPressed: () {
+                                myModel.updateItem(myModel.editIndex,
+                                    myModel.editThumb, myModel.editName);
+                              },
+                              child: const Text("Save")),
+                        ],
+                        content: Column(
+                          children: [
+                            Container(
+                              color: Colors.black45,
+                              child: IconButton(
+                                onPressed: () { js.context.callMethod('open', [myModel.thumbController.text]); },
+                                icon: CachedNetworkImage(
+                                  height: 72,
+                                  imageUrl: myModel.thumbController.text,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.image_not_supported),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                minLines: 3,
+                                maxLines: 5,
+                                onChanged: (text) { myModel.refreshEditForm(); },
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: "Thumbnail Image URL:",
+                                    hintText:
+                                        "Enter a valid url for a graphic."),
+                                controller: myModel.thumbController,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                minLines: 3,
+                                maxLines: 5,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: "Channel Name/Description:",
+                                    hintText:
+                                        "Enter the text for the channel description."),
+                                controller: myModel.nameController,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Text(""),
               ],
             ),
           ),

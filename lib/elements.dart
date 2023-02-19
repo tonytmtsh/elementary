@@ -97,6 +97,8 @@ class Category {
 
 class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
+  TextEditingController thumbController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   String appTitle = "Elementary </XML>";
 
@@ -120,9 +122,11 @@ class ElementsType with ChangeNotifier {
   List<Category> get categories {
     List<Category> c = elements
         .where((e) => ((e.name.startsWith("[COLORyellow]")) &&
-            (e.name.indexOf("[COLORyellow]", 1) == -1)))
+            (e.name.endsWith("[/COLOR]")) &&
+            (e.name.indexOf("[COLOR", 1) == -1)))
         .map((element) => Category(element.id, element.name))
         .toList();
+
     return c;
   }
 
@@ -130,6 +134,8 @@ class ElementsType with ChangeNotifier {
     if (index != -1) {
       editMode = true;
       editIndex = index;
+      nameController.text = elements[index].name;
+      thumbController.text = elements[index].thumb;
       editName = elements[index].name;
       editThumb = elements[index].thumb;
       notifyListeners();
@@ -138,8 +144,8 @@ class ElementsType with ChangeNotifier {
 
   void updateItem(int index, String thumb, String name) {
     if (index != -1) {
-      elements[index].thumb = thumb;
-      elements[index].name = name;
+      elements[index].thumb = thumbController.text;
+      elements[index].name = nameController.text;
       editMode = false;
       notifyListeners();
     }
@@ -147,6 +153,10 @@ class ElementsType with ChangeNotifier {
 
   void cancelEditMode() {
     editMode = false;
+    notifyListeners();
+  }
+
+  void refreshEditForm() {
     notifyListeners();
   }
 

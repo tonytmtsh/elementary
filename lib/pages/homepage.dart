@@ -28,8 +28,8 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               Row(children: const [
-                Expanded(flex: 1, child: Text('Category')),
-                Expanded(flex: 2, child: Text('Item')),
+                Expanded(flex: 1, child: Text('Categories')),
+                Expanded(flex: 2, child: Text('Channel Descriptions')),
                 Expanded(flex: 2, child: Text('Side Board'))
               ]),
             ],
