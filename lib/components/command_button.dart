@@ -62,6 +62,12 @@ class CommandButton extends StatelessWidget {
               case ElementCommands.positionBottom:
                 myModel.positionEnd();
                 break;
+              case ElementCommands.searchNext:
+                myModel.searchNext();
+                break;
+              case ElementCommands.searchPrevious:
+                myModel.searchNext();
+                break;
               case ElementCommands.gotoA:
                 // TODO: Handle this case.
                 break;

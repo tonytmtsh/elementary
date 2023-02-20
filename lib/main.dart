@@ -5,7 +5,7 @@ import 'package:elementary/elements.dart';
 
 void main() => runApp(const MyApp());
 
-// terminal command to build:  flutter build web --release
+// terminal command to build:  flutter build web --web-renderer html --release
 // Category version
 // then copy contents of folder build/web to C:\Users\tonyt\source\FlutterWebSites\tonytmtsh.github.io
 // commit and sync to publish

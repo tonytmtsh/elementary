@@ -21,6 +21,8 @@ enum ElementCommands {
   gotoA,
   gotoB,
   editElement,
+  searchNext,
+  searchPrevious,
 }
 
 String commandText(ElementCommands x) {
@@ -65,6 +67,12 @@ String commandText(ElementCommands x) {
     case ElementCommands.editElement:
       text = "edit";
       break;
+    case ElementCommands.searchNext:
+      text = "next";
+      break;
+    case ElementCommands.searchPrevious:
+      text = "previous";
+      break;
   }
   return text;
 }
@@ -99,6 +107,7 @@ class ElementsType with ChangeNotifier {
   ScrollController scrollController = ScrollController();
   TextEditingController thumbController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   String appTitle = "Elementary </XML>";
 
@@ -115,19 +124,53 @@ class ElementsType with ChangeNotifier {
   int editIndex = -1;
   String editThumb = "";
   String editName = "";
+  String searchText = "";
 
   List<Element> savedlist = <Element>[];
   String notes = 'init';
 
   List<Category> get categories {
     List<Category> c = elements
-        .where((e) => ((e.name.startsWith("[COLORyellow]")) &&
-            (e.name.endsWith("[/COLOR]")) &&
-            (e.name.indexOf("[COLOR", 1) == -1)))
+        .where((e) => ((e.name.startsWith("[COLORyellow]")) ||
+            (e.name.endsWith("[COLOR yellow]"))))
         .map((element) => Category(element.id, element.name))
         .toList();
 
     return c;
+  }
+
+  void searchNext() {
+    bool done = false;
+    int i = (selectedElement == -1) ? 0 : selectedElement;
+    while (!done) {
+      i += 1;
+      if (i >= elements.length) { i = 0; }
+      if (i == selectedElement) { done = true; }
+      else if (elements[i].name.toLowerCase().contains(searchText)) {
+        selectedElement = i;
+        done = true;
+      }
+    }
+    scrollController.animateTo(selectedElement * 48,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    notifyListeners();
+  }
+
+  void seachPrevious() {
+    bool done = false;
+    int i = (selectedElement == -1) ? 0 : selectedElement;
+    while (!done) {
+      i -= 1;
+      if (i <= 0) { i = elements.length; }
+      if (i == selectedElement) { done = true; }
+      else if (elements[i].name.toLowerCase().contains(searchText)) {
+        selectedElement = i;
+        done = true;
+      }
+    }
+    scrollController.animateTo(selectedElement * 48,
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    notifyListeners();
   }
 
   void enterEditMode(int index) {
