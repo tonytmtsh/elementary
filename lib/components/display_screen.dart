@@ -31,7 +31,7 @@ class DisplayScreen extends StatelessWidget {
                           myModel.positionCategory(myModel.categories[i].id);
                         },
                         dense: true,
-                        title: Text(myModel.categories[i].title,
+                        title: Text("$i) ${myModel.categories[i].title}",
                             style: TextStyles.bodySm),
                       ),
                     );
