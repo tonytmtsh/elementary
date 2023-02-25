@@ -5,6 +5,7 @@ import 'package:elementary/style/styles.dart';
 import 'package:elementary/elements.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:js' as js;
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class DisplayScreen extends StatelessWidget {
   const DisplayScreen({
@@ -160,6 +161,9 @@ class DisplayScreen extends StatelessWidget {
                     myModel.swapElements(oldIndex, newIndex);
                   },
                 ),
+                (myModel.elements.isEmpty)
+                    ? const DonateText()
+                    : const Text(''),
                 (myModel.editMode)
                     ? AlertDialog(
                         title: const Text("Edit Element"),
@@ -181,7 +185,10 @@ class DisplayScreen extends StatelessWidget {
                             Container(
                               color: Colors.black45,
                               child: IconButton(
-                                onPressed: () { js.context.callMethod('open', [myModel.thumbController.text]); },
+                                onPressed: () {
+                                  js.context.callMethod(
+                                      'open', [myModel.thumbController.text]);
+                                },
                                 icon: CachedNetworkImage(
                                   height: 72,
                                   imageUrl: myModel.thumbController.text,
@@ -197,7 +204,9 @@ class DisplayScreen extends StatelessWidget {
                               child: TextField(
                                 minLines: 3,
                                 maxLines: 5,
-                                onChanged: (text) { myModel.refreshEditForm(); },
+                                onChanged: (text) {
+                                  myModel.refreshEditForm();
+                                },
                                 decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: "Thumbnail Image URL:",
@@ -303,5 +312,44 @@ class DisplayScreen extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class DonateText extends StatelessWidget {
+  const DonateText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const String appName = '<b><i>Elementary &lt;/XML&gt;</i></b>';
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
+      child: HtmlWidget('''
+<p><b>MEMORANDUM</b></p>
+
+<p>To: All Users of $appName</p>
+
+<p>Subject: Introduction to $appName</p>
+
+<p>Dear Valued Users,</p>
+
+<p>We are delighted to introduce $appName, a new web application that saves you hours of editing your custom "favourites" file for your video viewing software. Our team has invested a significant amount of time and effort into the development of this tool, and we are excited to share it with you.</p>
+
+<p>Our goal is to create an exceptional user experience and help make your video viewing more efficient. We recognize that the best way to improve the tool is by receiving feedback from users like you. Therefore, we encourage you to share your thoughts and suggestions so that we can continue to enhance the functionality of $appName.</p>
+
+<p>We are committed to keeping this utility free of charge and have open-sourced it so that other developers can contribute to its improvement. However, if you find $appName valuable and would like to support our efforts, we welcome donations of any amount. Your donation will be used to cover the cost of running and maintaining the application, as well as continuing to improve it.</p>
+
+<p>To donate, please click the link below:</p>
+
+<p>[Insert Link]</p>
+
+<p>Thank you for using [Application Name], and we look forward to hearing your feedback.</p>
+
+<p>Best regards,</p>
+
+<p>TonyT</p>
+'''),
+    );
   }
 }
