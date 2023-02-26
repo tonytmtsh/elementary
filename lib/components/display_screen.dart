@@ -5,6 +5,8 @@ import 'package:elementary/style/styles.dart';
 import 'package:elementary/elements.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:js' as js;
+import 'package:flutter/services.dart';
+import 'package:flutter_donation_buttons/flutter_donation_buttons.dart';
 
 class DisplayScreen extends StatelessWidget {
   const DisplayScreen({
@@ -335,6 +337,13 @@ class DonateText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String appName = 'Elementary </XML>';
+    const String addressBTC = '1Pza2CQjGVAYcqJLNFh1F6F23dfcquLMnq';
+    const String addressETH = '0xCb295423A770e553fe153cB6595840D7929b913d';
+    const String addressLTC = 'LXDy5T6p5LzFUpeV5uN5SfyWvquf9bCCJV';
+    const String addressZEC = 't1Qfw1SJ2EZTfvoFTvG7BdpHXyrUiNYhk4Q';
+    const snackBar = SnackBar(
+      content: Text('Copied to clipboard.'),
+    );
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -420,48 +429,128 @@ class DonateText extends StatelessWidget {
               ])),
           const Text(''),
           const Text('To donate, please click the link below:'),
-          const Text('[Insert Link]'),
+          const Tooltip(
+              message: 'Make a donation using PayPal',
+              child: PayPalButton(
+                  paypalButtonId:
+                      "8ZUQK2HMDJE32")), // https://www.paypal.com/donate/?hosted_button_id=
           const Text(''),
           const Text('Or using Crypto:'),
-          Row(children: const [
-            SelectableText.rich(
+          Row(children: [
+            SizedBox(
+                width: 18,
+                height: 18,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        'https://upload.wikimedia.org/wikipedia/commons/9/98/Bitcoin_Sign.png')),
+            const SelectableText.rich(
                 TextSpan(style: TextStyle(color: Colors.black), children: [
               TextSpan(
-                  text: 'BTC: ', style: TextStyle(fontWeight: FontWeight.w600)),
-              TextSpan(text: '1Pza2CQjGVAYcqJLNFh1F6F23dfcquLMnq'),
+                  text: ' (BTC): ',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              TextSpan(text: addressBTC),
             ])),
             IconButton(
-            iconSize: 100,
-            icon: Icon(
-              Icons.add,
-              color: Colors.black,
+              iconSize: 18,
+              tooltip: 'Copy Bitcoin address to clipboard.',
+              icon: const Icon(
+                Icons.copy,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Clipboard.setData(const ClipboardData(text: addressBTC))
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
+              },
             ),
-            onPressed: null,
-          ),
           ]),
-          Row(children: const [
-            SelectableText.rich(
+          Row(children: [
+            SizedBox(
+                width: 18,
+                height: 18,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        'https://upload.wikimedia.org/wikipedia/commons/f/f1/ETC_LOGO_Full_Color_Black.png')),
+            const SelectableText.rich(
                 TextSpan(style: TextStyle(color: Colors.black), children: [
               TextSpan(
-                  text: 'ETH: ', style: TextStyle(fontWeight: FontWeight.w600)),
-              TextSpan(text: '0xCb295423A770e553fe153cB6595840D7929b913d'),
-            ]))
+                  text: ' (ETH): ',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              TextSpan(text: addressETH),
+            ])),
+            IconButton(
+              iconSize: 18,
+              tooltip: 'Copy Etherium address to clipboard.',
+              icon: const Icon(
+                Icons.copy,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Clipboard.setData(const ClipboardData(text: addressETH))
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
+              },
+            ),
           ]),
-          Row(children: const [
-            SelectableText.rich(
+          Row(children: [
+            SizedBox(
+                width: 18,
+                height: 18,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        'https://upload.wikimedia.org/wikipedia/commons/f/f8/LTC-400.png')),
+            const SelectableText.rich(
                 TextSpan(style: TextStyle(color: Colors.black), children: [
               TextSpan(
-                  text: 'LTC: ', style: TextStyle(fontWeight: FontWeight.w600)),
-              TextSpan(text: 'LXDy5T6p5LzFUpeV5uN5SfyWvquf9bCCJV'),
-            ]))
+                  text: ' (LTC): ',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              TextSpan(text: addressLTC),
+            ])),
+            IconButton(
+              iconSize: 18,
+              tooltip: 'Copy Litecoin address to clipboard.',
+              icon: const Icon(
+                Icons.copy,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Clipboard.setData(const ClipboardData(text: addressLTC))
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
+              },
+            ),
           ]),
-          Row(children: const [
-            SelectableText.rich(
+          Row(children: [
+            SizedBox(
+                width: 18,
+                height: 18,
+                child: CachedNetworkImage(
+                    imageUrl:
+                        'https://z.cash/wp-content/uploads/2020/03/zcash-icon-fullcolor.png')),
+            const SelectableText.rich(
                 TextSpan(style: TextStyle(color: Colors.black), children: [
               TextSpan(
-                  text: 'ZEC: ', style: TextStyle(fontWeight: FontWeight.w600)),
-              TextSpan(text: 't1Qfw1SJ2EZTfvoFTvG7BdpHXyrUiNYhk4Q'),
-            ]))
+                  text: ' (ZEC): ',
+                  style: TextStyle(fontWeight: FontWeight.w600)),
+              TextSpan(text: addressZEC),
+            ])),
+            IconButton(
+              iconSize: 18,
+              tooltip: 'Copy ZCash address to clipboard.',
+              icon: const Icon(
+                Icons.copy,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Clipboard.setData(const ClipboardData(text: addressZEC))
+                    .then((value) {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
+              },
+            ),
           ]),
           const Text(''),
           RichText(
@@ -479,35 +568,7 @@ class DonateText extends StatelessWidget {
               ])),
           const Text(''),
           const Text('Best regards,'),
-          const Text('TonyT'),
-          Row(
-            children: [
-              SizedBox(
-                  width: 32,
-                  height: 32,
-                  child: CachedNetworkImage(
-                      imageUrl:
-                          'https://upload.wikimedia.org/wikipedia/commons/9/98/Bitcoin_Sign.png')),
-          SizedBox(
-              width: 32,
-              height: 32,
-              child: CachedNetworkImage(
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/f/f1/ETC_LOGO_Full_Color_Black.png')),
-          SizedBox(
-              width: 32,
-              height: 32,
-              child: CachedNetworkImage(
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/f/f8/LTC-400.png')),
-          SizedBox(
-              width: 32,
-              height: 32,
-              child: CachedNetworkImage(
-                  imageUrl:
-                      'https://z.cash/wp-content/uploads/2020/03/zcash-icon-fullcolor.png')),
-            ],
-          ),
+          const Text('Thorn Mountain'),
         ],
       ),
     );
@@ -522,36 +583,38 @@ class InstructionsText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String appName = '<b><i>Elementary &lt;/XML&gt;</i></b>';
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Text('''
-<h3><center><b>INSTRUCTIONS</b></center></h3>
-
-<p>1) Click "load file" button to load an XML favourites.xml file.<br>
-NOTE: The file should be in the format:<br>
-<pre>&lt;favourites&gt;
-&nbsp;&nbsp;&lt;favourite name="Favorite name"</br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;thumb="http://link_to_image"&gt;data_for_favourite...&lt;/favourite&gt;<br>
-&nbsp;&nbsp;&lt;favourite ...&gt;...&lt;/favourite&gt;<br>
-&nbsp;&nbsp;...<br>
-&lt;/favourite></pre><br></p>
-
-<p>2) Drag items around using the handles on the right.</p>
-
-<p>3) Edit the item by clicking and holding the mouse button (long press).</p>
-
-<p>4) Slide right to expose bookmark buttons to set bookmarks easily.</p>
-
-<p>5) Slide right to move items to booksmarks, or into the Side Board.</p>
-
-<p>6) Slide items left to move them out of the Side Board and back to the list at either bookmark A or bookmark B.</br>
-
-<p>7) Remember to click the file button.  Only items in the Channel Descriptions column will be written to the new_favourites.xml file.</p>
-
-
-<p>Happy editing...</p>
-
-'''),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+        Center(child: Text('INSTRUCTIONS', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
+        Text(''),
+        Text('1) Click "load file" button to load an XML favourites.xml file.<br>NOTE: The file should be in the format:'),
+        Text('<favourites>'),
+        Text('   <favourite name="Favorite name"'),
+        Text('       thumb="http://link_to_image">data_for_favourite...</favourite>'),
+        Text('   <favourite ...>...</favourite&gt>'),
+        Text('   ...'),
+        Text('</favourite>'),
+        Text(''),
+        Text('2) Drag items around using the handles on the right.'),
+        Text(''),
+        Text('3) Edit the item by clicking and holding the mouse button (long press).'),
+        Text(''),
+        Text('4) Slide right to expose bookmark buttons to set bookmarks easily.'),
+        Text(''),
+        Text('5) Slide right to move items to booksmarks, or into the Side Board.'),
+        Text(''),
+        Text('6) Slide items left to move them out of the Side Board and back to the list at either bookmark A or bookmark B.'),
+        Text(''),
+        Text('Remember to click the file button.  Only items in the Channel Descriptions column will be written to the new_favourites.xml file.'),
+        Text(''),
+        Text(''),
+        Text('Happy editing...'),
+        Text(''),
+      ]),
     );
   }
 }
