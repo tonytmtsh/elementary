@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white10,
       appBar: AppBar(
-        toolbarHeight: kToolbarHeight * 2.0,
+          toolbarHeight: kToolbarHeight * 2.0,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           title: Column(
@@ -25,12 +25,13 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                    child: Container(color: Colors.white, child: const CommandBar()),
+                    child: Container(
+                        color: Colors.white, child: const CommandBar()),
                   ),
-                  const SizedBox(width: 500, child: SearchBar()),
+                  const SizedBox(width: 500, child: AppSearchBar()),
                 ],
               ),
-              Row(children: const [
+              const Row(children: [
                 Expanded(flex: 1, child: Text('Categories')),
                 Expanded(flex: 2, child: Text('Channel Descriptions')),
                 Expanded(flex: 2, child: Text('Side Board'))

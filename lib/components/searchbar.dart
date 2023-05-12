@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:elementary/elements.dart';
 
-class SearchBar extends StatelessWidget {
-  const SearchBar({
+class AppSearchBar extends StatelessWidget {
+  const AppSearchBar({
     Key? key,
   }) : super(key: key);
 
@@ -27,11 +27,16 @@ class SearchBar extends StatelessWidget {
                     labelText: "Search Text:",
                     hintText: "Type text and hit next or previous.")),
           ),
-          const CommandButton(command: ElementCommands.searchNext, tip: 'Continue search', disabled: false),
-          const CommandButton(command: ElementCommands.searchPrevious, tip: 'Find previous', disabled: false),
+          const CommandButton(
+              command: ElementCommands.searchNext,
+              tip: 'Continue search',
+              disabled: false),
+          const CommandButton(
+              command: ElementCommands.searchPrevious,
+              tip: 'Find previous',
+              disabled: false),
         ],
       );
     });
   }
 }
-
